@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>JSF Hibernate CRUD Example</title>
+        <style>
+            tfoot{
+                text-align: center;
+            }
+            thead{
+                background-color: magenta;
+                color: white;
+            }
+            td{
+                font-weight: bold;
+            }
+            .msg{
+                font-size: small;
+                color: blue;
+            }
+        </style>
+    </h:head>
+    <h:body>
+    	<h3>MENU:</h3>
+    	<ul>
+		  <c:forEach var="cat" items="${category.allCategoriesNames}">
+			<li>
+			 	${cat}
+			</li>
+		  </c:forEach>
+		</ul>
+		
+        <h:form>
+            <h:panelGrid id="panel1" columns="2" border="1" cellpadding="5" cellspacing="1">
+                <f:facet name="header">
+                    <h:outputText value="Add Category"/>
+                </f:facet>               
+                <h:outputLabel value="Category Name:"/>
+                <h:inputText value="#{category.name}" id="fn"/>               
+                <f:facet name="footer">                   
+                    <h:commandButton value="Save" action="#{category.saveCategory}">
+                    	<f:ajax render="fn" execute="@form"/>
+                    </h:commandButton>
+                </f:facet>
+            </h:panelGrid>            
+        </h:form>
+        
+        <h:form>
+         	<h:panelGrid id="panel2" columns="2" border="1" cellpadding="5" cellspacing="1">
+              	<f:facet name="header">
+                	<h:outputText value="Update/Delete Category Info"/>
+                </f:facet>
+                <h:outputLabel value="Select Category:"/>
+	            <h:selectOneMenu value="#{category.selectedname}" id="ulist">
+                 	<f:selectItems value="#{category.allCategoriesNames}"/>
+                   	<f:ajax event="change" render="cid fname" listener="#{category.fullInfo}"/>
+               	</h:selectOneMenu>
+                <h:outputLabel value="Category Name:"/>
+                <h:inputText value="#{category.name}" id="fname"/>
+                    
+                <f:facet name="footer">
+	               	<h:commandButton value="Update Info" action="#{category.updateCategory}">
+                  	 	<f:ajax render="ulist fname" execute="@form"/>
+                   	</h:commandButton>
+                   	<h:commandButton value="Delete Info" action="#{category.deleteCategory}">
+                      	<f:ajax render="ulist fname" execute="@form"/>
+                	</h:commandButton>
+                </f:facet>
+            </h:panelGrid>
+      	</h:form>
+    </h:body>
+</html>
