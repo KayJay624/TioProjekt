@@ -16,9 +16,10 @@ public class PositionDOA {
         Transaction trns = null;
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
+        	 System.out.println("Position Saving!");
             trns = session.beginTransaction();
             //session.save(c.getCategory());
-            c.setIngredients(ing);
+            //c.setIngredients(ing);
             session.save(c);
             session.getTransaction().commit();
         } catch (RuntimeException e) {
@@ -84,18 +85,71 @@ public class PositionDOA {
         }
         return users;
     }
- 
-    public List<Position> getPositionById(String cid) {
-        System.out.println(cid);
-//        Customer cust = null;
+    
+    public List<Position> getAllPosition(int categoryId) {
+        List<Position> users = new ArrayList<Position>();
         Transaction trns = null;
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
             trns = session.beginTransaction();
-            String queryString = "from Ingredient where concat(ingredient_id, ' ', ingredient_name) = :id";
+            users = session.createQuery("from Position where category_id = "+ categoryId).list();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return users;
+    }
+ 
+    public List<String> getAllPositionNames(int categoryId) {
+        List<String> users = new ArrayList<String>();
+        Transaction trns = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns = session.beginTransaction();
+            //users = session.createQuery("select * from Category").list();
+            users = session.createQuery("select name from Position where category_id = "+ categoryId).list();
+            
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return users;
+    }
+    
+    public List<String> getAllPositionNames() {
+        List<String> users = new ArrayList<String>();
+        Transaction trns = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns = session.beginTransaction();
+            //users = session.createQuery("select * from Category").list();
+            users = session.createQuery("select name from Position").list();
+            
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return users;
+    }
+ 
+    public List<Position> getPositionByName(String cid) {
+        System.out.println(cid);
+        Position cust = null;
+        Transaction trns = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns = session.beginTransaction();
+            String queryString = "from Position where name = :cid";
             Query query = session.createQuery(queryString);
-            query.setString("id", cid);
-            //cust = (Customer) query.uniqueResult();
+            query.setParameter("cid", cid);
+            //cust = (Position) query.uniqueResult();
+            //System.out.println(cust.getName() + " Imie to me");
             List<Position> list = query.list();
             if (list.size() > 0) {
                 return list;
@@ -108,6 +162,30 @@ public class PositionDOA {
         }
         return null;
     }
-
+    
+    public Category getPositionById(int cid) {
+        System.out.println(cid);
+        Category cust = null;
+        Transaction trns = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns = session.beginTransaction();
+            String queryString = "from Position where id = :cid";
+            Query query = session.createQuery(queryString);
+            query.setParameter("cid", cid);
+            cust = (Category) query.uniqueResult();
+            //System.out.println(cust.getName() + " Imie to me");
+            List<Category> list = query.list();
+            if (list.size() > 0) {
+                return cust;
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return null;
+    }
 }
 

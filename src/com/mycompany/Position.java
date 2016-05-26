@@ -15,12 +15,28 @@ public class Position implements java.io.Serializable{
 	private Category category;
 	private Set ingredients;
 	private String name;
+	private String selectedPos;
+	private String selectedCat;
 		
+	public Position() {
+		
+	}
+	
 	public Position(String name, Category category) {
 		super();
 		this.category = category;
 		this.name = name;
 	}
+	
+	
+	public String getSelectedPos() {
+		return selectedPos;
+	}
+
+	public void setSelectedPos(String selectedPos) {
+		this.selectedPos = selectedPos;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -48,52 +64,94 @@ public class Position implements java.io.Serializable{
 		this.ingredients = ingredients;
 	}
 	
-	public void savePosotion() {   
+	
+	
+	public String getSelectedCat() {
+		return selectedCat;
+	}
+
+	public void setSelectedCat(String selectedCat) {
+		this.selectedCat = selectedCat;
+	}
+
+	public void savePosition() {   
+		System.out.println("Position Saveinfg!");
 		PositionDOA dao = new PositionDOA();
-        dao.addPosition(this, null);
+		CategoryDAO daoC = new CategoryDAO();
+		System.out.println("Position Saveinfg!");
+		List<Category> lc = daoC.getCategoryByName(selectedCat);
+        //System.out.println(lc.get(0).name);
+        this.category = lc.get(0);
+		
+		dao.addPosition(this, null);
         System.out.println("Position Saved Successfull!");
         clearAll();
     }
     
-	public void updateCategory() {      
+	public void updatePosition() {      
 		PositionDOA dao = new PositionDOA();
+		CategoryDAO daoC = new CategoryDAO();
+		this.category = daoC.getCategoryByName(selectedCat).get(0);
         dao.updatePosition(this);
-        System.out.println("Category Updated Successfull!");
+        System.out.println("Position Updated Successfull!");
         clearAll();
     }
-    public void deleteCategory() {
-    	CategoryDAO dao = new CategoryDAO();
-        dao.deleteCategory(this.id);
+    public void deletePosition() {
+    	PositionDOA dao = new PositionDOA();
+        dao.deletePosition(this.id);
         System.out.println("Category Deleted Successfull!");
         clearAll();
     }
+    
+    public void deletePosition(Position p){
+    	PositionDOA dao = new PositionDOA();
+        dao.deletePosition(p.id);
+        System.out.println("Position Deleted Successfull!");
+    }
  
-    public List<Category> getAllCategories() {
-        List<Category> users = new ArrayList<Category>();
-        CategoryDAO dao = new CategoryDAO();
-        users = dao.getAllCategories();
+    public List<Position> getAllPositions() {
+        List<Position> users = new ArrayList<Position>();
+        PositionDOA dao = new PositionDOA();
+        users = dao.getAllPosition();
         return users;
     }
     
-    public List<String> getAllCategoriesNames() {
+    public List<Position> getAllPositions(int id) {
+        List<Position> users = new ArrayList<Position>();
+        PositionDOA dao = new PositionDOA();
+        users = dao.getAllPosition(id);
+        return users;
+    }
+    
+    public List<String> getAllPositionsNames() {
         List<String> users = new ArrayList<String>();
-        CategoryDAO dao = new CategoryDAO();
-        users = dao.getAllCategoriesNames();
+        PositionDOA dao = new PositionDOA();
+        users = dao.getAllPositionNames();
+        return users;
+    }
+    
+    public List<String> getAllPositionNames(int i) {
+        List<String> users = new ArrayList<String>();
+        PositionDOA dao = new PositionDOA();
+        users = dao.getAllPositionNames(i);
         return users;
     }
  
     public void fullInfo() {
-    	CategoryDAO dao = new CategoryDAO();
-        List<Category> lc = dao.getCategoryByName(selectedname);
+    	PositionDOA dao = new PositionDOA();
+        List<Position> lc = dao.getPositionByName(selectedPos);
         System.out.println(lc.get(0).name);
         this.id = lc.get(0).id;
         this.name = lc.get(0).name;
+        this.category = lc.get(0).category;
+        this.selectedCat = lc.get(0).category.getName();
 
     }
  
     private void clearAll() {
         this.id = 0;
         this.name = "";
+        this.category = null;
         
     }
 	

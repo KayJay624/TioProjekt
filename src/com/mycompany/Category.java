@@ -68,6 +68,17 @@ public class Category implements java.io.Serializable{
         System.out.println("Category Deleted Successfull!");
         clearAll();
     }
+    
+    public void deleteCategory(Category c) {
+    	CategoryDAO dao = new CategoryDAO();
+        dao.deleteCategory(c.id);
+        PositionDOA daoP = new PositionDOA();
+        for(Position p : daoP.getAllPosition(c.id)) {
+        	p.deletePosition();
+        }
+        System.out.println("Category Deleted Successfull!");
+        clearAll();
+    }
  
     public List<Category> getAllCategories() {
         List<Category> users = new ArrayList<Category>();

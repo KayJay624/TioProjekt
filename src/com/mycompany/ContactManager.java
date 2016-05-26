@@ -44,15 +44,15 @@ public class ContactManager {
         pos.addPosition(p);*/
     	
     	HashSet set1 = new HashSet();
-        set1.add(new Ingredient("Ziemniaki", 1));
+        set1.add(new Ingredient("wiecej burakow", 1));
         set1.add(new Ingredient("Kotlet", 1));
-        set1.add(new Ingredient("Suruwka", 1));
+        set1.add(new Ingredient("Buraki", 1));
     	
         PositionDOA pos = new PositionDOA();
         CategoryDAO cat = new CategoryDAO();
         Category cat1 = (Category) cat.getCategoryById(14); 
-        pos.addPosition(new Position("Kotlet z ziemniakami", cat1), set1);
-        
+        pos.addPosition(new Position("Kotlet z burakami", cat1), set1);
+        System.out.println(pos.getAllPositionNames(14));
     	//ing.addIngredient(ing1);
     	//cat.addCategory(cat1);
     	//System.out.println(pos.getAllPosition().get(0));

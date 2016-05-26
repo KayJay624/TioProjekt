@@ -17,6 +17,7 @@
             }
             td{
                 font-weight: bold;
+                font-size: small;
             }
             .msg{
                 font-size: small;
@@ -25,14 +26,58 @@
         </style>
     </h:head>
     <h:body>
-    	<h3>MENU:</h3>
-    	<ul>
-		  <c:forEach var="cat" items="${category.allCategoriesNames}">
-			<li>
-			 	${cat}
-			</li>
+    	
+    	<h:form id="menu">
+    	
+    	<h:panelGrid id="panel23" columns="1" border="2" cellpadding="5" cellspacing="3">
+    	  <f:facet name="header">
+    	  	<h:outputLabel value="MENU:"/>
+    	  </f:facet>
+		  <c:forEach var="cat" items="${category.allCategories}">
+				<h:column>
+				 	<h:outputLabel value="${cat.name}" style="font-size:large"/>
+				 	<h:commandButton value="Delete" action="#{category.deleteCategory(cat)}"  style="float:right">
+		           		<f:ajax render="menu" execute="@form"/>
+		          	</h:commandButton>	
+			 	</h:column>
+			 		<h:panelGrid id="panel3" columns="2" border="2" cellpadding="5" cellspacing="1">
+			 		 <c:forEach var="pos" items="${position.getAllPositions(cat.id)}">
+			 		 
+			 		 				 		  
+				 		 	<h:outputLabel value="${pos.name}" style="font-size:small"/>
+				 		 	<h:commandButton value="Delete Info" action="#{position.deletePosition(pos)}" style="float:right">
+	                      		<f:ajax render="menu" execute="@form"/>
+	                		</h:commandButton>	
+	                	
+			 		 
+			 		 </c:forEach>
+			 		</h:panelGrid>
+			
 		  </c:forEach>
-		</ul>
+		</h:panelGrid>
+		</h:form>
+		
+		 <h:form>
+            <h:panelGrid id="panel3" columns="2" border="1" cellpadding="5" cellspacing="1">
+                <f:facet name="header">
+                    <h:outputText value="Add Position"/>
+                </f:facet>               
+                <h:outputLabel value="Position Name:"/>
+                <h:inputText value="#{position.name}" id="pn"/>
+                
+                <h:outputLabel value="Position Category:"/>
+                <h:selectOneMenu value="#{position.selectedCat}" id="cat">
+                 	<f:selectItems value="#{category.allCategoriesNames}"/>                	                  	
+               	</h:selectOneMenu>
+                               
+                <f:facet name="footer">                   
+                    <h:commandButton value="Save" action="#{position.savePosition}">
+                    	 <f:ajax render="pn menu cat" execute="@form"/>
+                    </h:commandButton>
+                </f:facet>
+            </h:panelGrid>            
+        </h:form>
+		
 		
         <h:form>
             <h:panelGrid id="panel1" columns="2" border="1" cellpadding="5" cellspacing="1">
@@ -43,11 +88,42 @@
                 <h:inputText value="#{category.name}" id="fn"/>               
                 <f:facet name="footer">                   
                     <h:commandButton value="Save" action="#{category.saveCategory}">
-                    	<f:ajax render="fn" execute="@form"/>
+                    	<f:ajax render="fn menu" execute="@form"/>
                     </h:commandButton>
                 </f:facet>
             </h:panelGrid>            
         </h:form>
+        
+        <h:form>
+         	<h:panelGrid id="panel4" columns="2" border="1" cellpadding="5" cellspacing="1">
+              	<f:facet name="header">
+                	<h:outputText value="Update/Delete Position Info"/>
+                </f:facet>
+                                            	
+               	<h:outputLabel value="Select Position:"/>
+               	<h:selectOneMenu value="#{position.selectedPos}" id="plist">
+                 	<f:selectItems value="#{position.getAllPositionsNames()}"/>
+                   	<f:ajax event="change" render="cid pname fcat plist ulist" listener="#{position.fullInfo}"/>
+               	</h:selectOneMenu>
+                <h:outputLabel value="Position Name:"/>
+                <h:inputText value="#{position.name}" id="pname"/>
+                
+                <h:outputLabel value="Position Category:"/>
+                <h:selectOneMenu value="#{position.selectedCat}" id="ulist">
+                 	<f:selectItems value="#{category.allCategoriesNames}"/>                  	
+               	</h:selectOneMenu>
+                    
+                <f:facet name="footer">
+	               	<h:commandButton value="Update Info" action="#{position.updatePosition}">
+                  	 	<f:ajax render="ulist fname menu plist fcat pname" execute="@form"/>
+                   	</h:commandButton>
+                   	<h:commandButton value="Delete Info" action="#{position.deletePosition}">
+                      	<f:ajax render="ulist fname menu plist fcat pname" execute="@form"/>
+                	</h:commandButton>
+                </f:facet>
+            </h:panelGrid>
+      	</h:form>
+        
         
         <h:form>
          	<h:panelGrid id="panel2" columns="2" border="1" cellpadding="5" cellspacing="1">
@@ -64,10 +140,10 @@
                     
                 <f:facet name="footer">
 	               	<h:commandButton value="Update Info" action="#{category.updateCategory}">
-                  	 	<f:ajax render="ulist fname" execute="@form"/>
+                  	 	<f:ajax render="ulist fname menu" execute="@form"/>
                    	</h:commandButton>
                    	<h:commandButton value="Delete Info" action="#{category.deleteCategory}">
-                      	<f:ajax render="ulist fname" execute="@form"/>
+                      	<f:ajax render="ulist fname menu" execute="@form"/>
                 	</h:commandButton>
                 </f:facet>
             </h:panelGrid>
