@@ -43,16 +43,21 @@ public class ContactManager {
         Position p = new Position("Pierogi ruskie", cat1);
         pos.addPosition(p);*/
     	
-    	HashSet set1 = new HashSet();
+    	/*HashSet set1 = new HashSet();
         set1.add(new Ingredient("wiecej burakow", 1));
         set1.add(new Ingredient("Kotlet", 1));
-        set1.add(new Ingredient("Buraki", 1));
+        set1.add(new Ingredient("Buraki", 1));*/
     	
-        PositionDOA pos = new PositionDOA();
-        CategoryDAO cat = new CategoryDAO();
-        Category cat1 = (Category) cat.getCategoryById(14); 
-        pos.addPosition(new Position("Kotlet z burakami", cat1), set1);
-        System.out.println(pos.getAllPositionNames(14));
+        //PositionDOA pos = new PositionDOA();
+        //CategoryDAO cat = new CategoryDAO();
+        //Category cat1 = (Category) cat.getCategoryById(14); 
+        //pos.addPosition(new Position("Kotlet z burakami", cat1), set1);
+        //Position p = pos.getPositionById(13);
+       // System.out.println(p.getId() + "\t" + p.getName());
+        
+        //Transact t = new Transact(1, "01.06.2016", p, false, "");
+       // TransactionDAO.addTransaction(t, 2);
+       // System.out.println(TransactionDAO.getTransactions(1, "31.05.2016", "02.06.2016").get(0).getDate());
     	//ing.addIngredient(ing1);
     	//cat.addCategory(cat1);
     	//System.out.println(pos.getAllPosition().get(0));

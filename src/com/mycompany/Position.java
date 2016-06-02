@@ -1,6 +1,7 @@
 package com.mycompany;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -17,6 +18,7 @@ public class Position implements java.io.Serializable{
 	private String name;
 	private String selectedPos;
 	private String selectedCat;
+	private LinkedList<String> selectedIng = new LinkedList<String>();
 		
 	public Position() {
 		
@@ -66,6 +68,14 @@ public class Position implements java.io.Serializable{
 	
 	
 	
+	public LinkedList<String> getSelectedIng() {
+		return selectedIng;
+	}
+
+	public void setSelectedIng(LinkedList<String> selectedIng) {
+		this.selectedIng = selectedIng;
+	}
+
 	public String getSelectedCat() {
 		return selectedCat;
 	}
@@ -75,15 +85,19 @@ public class Position implements java.io.Serializable{
 	}
 
 	public void savePosition() {   
-		System.out.println("Position Saveinfg!");
 		PositionDOA dao = new PositionDOA();
 		CategoryDAO daoC = new CategoryDAO();
-		System.out.println("Position Saveinfg!");
+		IngredientDOA daoI = new IngredientDOA();
+		this.ingredients = new HashSet();
+		for(String s : selectedIng) {
+			Ingredient i =(Ingredient)daoI.getIngredientByName(s);
+			this.ingredients.add(new Ingredient(i));
+		}
 		List<Category> lc = daoC.getCategoryByName(selectedCat);
         //System.out.println(lc.get(0).name);
         this.category = lc.get(0);
 		
-		dao.addPosition(this, null);
+		dao.addPosition(this, ingredients);
         System.out.println("Position Saved Successfull!");
         clearAll();
     }
@@ -152,6 +166,7 @@ public class Position implements java.io.Serializable{
         this.id = 0;
         this.name = "";
         this.category = null;
+        this.selectedIng = new LinkedList();
         
     }
 	

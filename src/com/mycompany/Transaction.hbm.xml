@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-06-01 21:47:37 by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="com.mycompany.Transact" table="TRANSACTION">
+        <id name="transaction_id" type="int">
+            <column name="TRANSACTION_ID" />
+            <generator class="identity" />
+        </id>
+        <property name="date" type="java.lang.String">
+            <column name="DATE" />
+        </property>
+        <many-to-one name="position" class="com.mycompany.Position" fetch="join">
+            <column name="POSITION" />
+        </many-to-one>
+        <property name="state" type="boolean">
+            <column name="STATE" />
+        </property>
+        <property name="comment" type="java.lang.String">
+            <column name="COMMENT" />
+        </property>
+    </class>
+</hibernate-mapping>

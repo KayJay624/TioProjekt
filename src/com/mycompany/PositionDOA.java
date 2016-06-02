@@ -19,7 +19,7 @@ public class PositionDOA {
         	 System.out.println("Position Saving!");
             trns = session.beginTransaction();
             //session.save(c.getCategory());
-            //c.setIngredients(ing);
+            c.setIngredients(ing);
             session.save(c);
             session.getTransaction().commit();
         } catch (RuntimeException e) {
@@ -163,9 +163,9 @@ public class PositionDOA {
         return null;
     }
     
-    public Category getPositionById(int cid) {
+    public Position getPositionById(int cid) {
         System.out.println(cid);
-        Category cust = null;
+        Position cust = null;
         Transaction trns = null;
         Session session = HibernateUtil.getSessionFactory().openSession();
         try {
@@ -173,7 +173,7 @@ public class PositionDOA {
             String queryString = "from Position where id = :cid";
             Query query = session.createQuery(queryString);
             query.setParameter("cid", cid);
-            cust = (Category) query.uniqueResult();
+            cust = (Position) query.uniqueResult();
             //System.out.println(cust.getName() + " Imie to me");
             List<Category> list = query.list();
             if (list.size() > 0) {

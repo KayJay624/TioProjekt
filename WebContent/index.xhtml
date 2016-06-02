@@ -26,7 +26,9 @@
         </style>
     </h:head>
     <h:body>
-    	
+    	  <c:choose>
+    		<c:when test="${not empty login}">
+    		You are already login as: ${login}
     	<h:form id="menu">
     	
     	<h:panelGrid id="panel23" columns="1" border="2" cellpadding="5" cellspacing="3">
@@ -48,7 +50,16 @@
 				 		 	<h:commandButton value="Delete Info" action="#{position.deletePosition(pos)}" style="float:right">
 	                      		<f:ajax render="menu" execute="@form"/>
 	                		</h:commandButton>	
-	                	
+	                
+			 		 		<c:forEach var="ing" items="${ingredient.getAllIngredients(pos.id)}">
+			 		 
+			 		 				 		  
+					 		 	<h:outputLabel value="- ${ing.name}" style="font-size:small"/>
+					 		 	<h:outputLabel value=" " style="font-size:small"/>					 		 		                		
+			 		 
+					 		 </c:forEach>
+					 		
+	                		
 			 		 
 			 		 </c:forEach>
 			 		</h:panelGrid>
@@ -69,6 +80,12 @@
                 <h:selectOneMenu value="#{position.selectedCat}" id="cat">
                  	<f:selectItems value="#{category.allCategoriesNames}"/>                	                  	
                	</h:selectOneMenu>
+                   
+                <h:outputLabel value="Select Ingredients:"/>
+               	<h:selectManyMenu value="#{position.selectedIng}" id="ilist">
+                 	<f:selectItems value="#{ingredient.getAllIngredientsNames()}"/>
+                   
+               	</h:selectManyMenu>   
                                
                 <f:facet name="footer">                   
                     <h:commandButton value="Save" action="#{position.savePosition}">
@@ -105,8 +122,15 @@
                  	<f:selectItems value="#{position.getAllPositionsNames()}"/>
                    	<f:ajax event="change" render="cid pname fcat plist ulist" listener="#{position.fullInfo}"/>
                	</h:selectOneMenu>
+                
                 <h:outputLabel value="Position Name:"/>
                 <h:inputText value="#{position.name}" id="pname"/>
+                
+                <h:outputLabel value="Select Ingredients:"/>
+               	<h:selectManyMenu value="#{position.selectedIng}" id="ilist">
+                 	<f:selectItems value="#{ingredient.getAllIngredientsNames()}"/>
+                   	<f:ajax event="change" render="cid pname fcat plist ulist ilist" listener="#{position.fullInfo}"/>
+               	</h:selectManyMenu>
                 
                 <h:outputLabel value="Position Category:"/>
                 <h:selectOneMenu value="#{position.selectedCat}" id="ulist">
@@ -115,10 +139,10 @@
                     
                 <f:facet name="footer">
 	               	<h:commandButton value="Update Info" action="#{position.updatePosition}">
-                  	 	<f:ajax render="ulist fname menu plist fcat pname" execute="@form"/>
+                  	 	<f:ajax render="ulist fname menu plist fcat pname ilist" execute="@form"/>
                    	</h:commandButton>
                    	<h:commandButton value="Delete Info" action="#{position.deletePosition}">
-                      	<f:ajax render="ulist fname menu plist fcat pname" execute="@form"/>
+                      	<f:ajax render="ulist fname menu plist fcat pname ilist" execute="@form"/>
                 	</h:commandButton>
                 </f:facet>
             </h:panelGrid>
@@ -148,5 +172,30 @@
                 </f:facet>
             </h:panelGrid>
       	</h:form>
+      	
+      	<h:form>
+            <h:panelGrid id="panelIngredients" columns="2" border="1" cellpadding="5" cellspacing="1">
+                <f:facet name="header">
+                    <h:outputText value="Add Ingredient"/>
+                </f:facet>               
+                <h:outputLabel value="Ingredient Name:"/>
+                <h:inputText value="#{ingredient.name}" id="in"/> 
+                <h:outputLabel value="Ingredient Quantity:"/>
+                <h:inputText value="#{ingredient.quantity}" id="iq"/>                    
+                <f:facet name="footer">                   
+                    <h:commandButton value="Save" action="#{ingredient.saveIngredient()}">
+                    	<f:ajax render="in iq menu" execute="@form"/>
+                    </h:commandButton>
+                </f:facet>
+            </h:panelGrid>            
+        </h:form>
+      	
+      	</c:when>
+    <c:otherwise>
+    	You are not login
+    	<a href="http://localhost:8080/TioProjekt/login.jsp">Login Page</a>
+        
+    </c:otherwise>
+    </c:choose>
     </h:body>
 </html>

@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>New order</title>
+        <style>
+            tfoot{
+                text-align: center;
+            }
+            thead{
+                background-color: magenta;
+                color: white;
+            }
+            td{
+                font-weight: bold;
+                font-size: small;
+            }
+            .msg{
+                font-size: small;
+                color: blue;
+            }
+        </style>
+    </h:head>
+    <h:body>
+    	
+    	  <c:choose>
+    		<c:when test="${not empty login and role == user}">
+    		Your login is: ${login} and you are: ${role} 
+    	<h:form id="menu">
+    	
+    	<h:panelGrid id="panel23" columns="1" border="2" cellpadding="5" cellspacing="3">
+    	  <f:facet name="header">
+    	  	<h:outputLabel value="MENU:"/>
+    	  </f:facet>
+		  <c:forEach var="cat" items="${category.allCategories}">
+				<h:column>
+				 	<h:outputLabel value="${cat.name}" style="font-size:large"/>
+				 		
+			 	</h:column>
+			 		<h:panelGrid id="panel3" columns="2" border="2" cellpadding="5" cellspacing="1">
+			 		 <c:forEach var="pos" items="${position.getAllPositions(cat.id)}">
+			 		 
+			 		 				 		  
+				 		 	<h:outputLabel value="${pos.name}" style="font-size:small"/>
+				 		 	         	
+          					<h:commandButton value="Add" action="#{transact.addPosition(pos)}" style="float:right">
+	                      		<f:ajax render="menu2" execute="@form"/>
+	                		</h:commandButton>	
+	                
+			 		 		<c:forEach var="ing" items="${ingredient.getAllIngredients(pos.id)}">
+			 		 
+			 		 				 		  
+					 		 	<h:outputLabel value="- ${ing.name}" style="font-size:small"/>
+					 		 	<h:outputLabel value=" " style="font-size:small"/>					 		 		                		
+			 		 
+					 		 </c:forEach>
+					 		
+	                		
+			 		 
+			 		 </c:forEach>
+			 		</h:panelGrid>
+			
+		  </c:forEach>
+		</h:panelGrid>
+		</h:form>
+		
+		<h:form id="menu2">
+		<h:panelGrid id="panel234" columns="1" border="2" cellpadding="5" cellspacing="3">
+		<h:outputLabel value="Wybrane dania:" />
+		<c:forEach var="pos" items="${transact.positions}">
+			<h:outputLabel value="${pos.name}"/>
+		</c:forEach>
+		<f:facet name="footer">
+	               	<h:commandButton value="Order" action="#{transact.saveTransaction()}">
+                  	 	<f:ajax render="menu2" execute="@form"/>
+                   	</h:commandButton>
+                   	</f:facet>
+		</h:panelGrid>
+		</h:form>
+		
+		
+	</c:when>	
+    <c:otherwise>
+    	You are not login
+    	<a href="http://localhost:8080/TioProjekt/login.jsp">Login Page</a>
+        
+    </c:otherwise>
+    </c:choose>
+    </h:body>
+</html>
