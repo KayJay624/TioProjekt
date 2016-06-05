@@ -35,7 +35,7 @@ public class loginServlet extends HttpServlet {
 	        	login.toLowerCase().trim().equals("user") ||
 	        	login.toLowerCase().trim().equals("admin3")) {
 	            
-	        	out.println("Welcome " + login + "<br> <a href=\"login.jsp\">Back to main</a>");
+	        	out.println("Welcome " + login + "<br> <a href=\"http://localhost:8080/TioProjekt/\">Back to main</a>");
 	            request.getSession().setAttribute("login", login);
 	            UsersBean users = (UsersBean) getServletContext().getAttribute("users");
 	            

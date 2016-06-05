@@ -17,15 +17,28 @@ public class Transact  implements java.io.Serializable{
 	private boolean state;
 	private String comment;
 	private LinkedList<Position> positions = new LinkedList<Position>();
+	private int quant;
 	
 	public Transact() {
 		
 	}
 	
 	public void addPosition(Position p) {
+		
+		//p.setQuant(a);
 		this.positions.add(p);
 	}
 	
+	
+	
+	public int getQuant() {
+		return quant;
+	}
+
+	public void setQuant(int quant) {
+		this.quant = quant;
+	}
+
 	public LinkedList<Position> getPositions() {
 		return positions;
 	}
@@ -38,13 +51,14 @@ public class Transact  implements java.io.Serializable{
 
 
 
-	public Transact(int transaction_id, String date, Position position, boolean state, String comment) {
+	public Transact(int transaction_id, String date, Position position, boolean state, String comment, int quant) {
 		super();
 		this.transaction_id = transaction_id;
 		this.date = date;
 		this.position = position;
 		this.state = state;
 		this.comment = comment;
+		this.quant = quant;
 	}
 
 
@@ -97,21 +111,25 @@ public class Transact  implements java.io.Serializable{
 		this.position = position;
 	}
 	
-	public void saveTransaction() {   
+	public void saveTransaction(int q, String userName) {   
 		this.position = this.positions.get(0);
-		//this.date = new Date().toString();
-		TransactionDAO.addTransaction(this, 2);
+		int userId = TransactionDAO.getUserId(userName);
+		System.out.println("Counter: " + this.quant);
+		System.out.println("sfdsdfsdfsdf  " + q);
+		this.quant = q;
+		TransactionDAO.addTransaction(this, userId);
 		System.out.println("sdfsdf234324");
         clearAll();
     }
 	
-	private void clearAll() {
+	public void clearAll() {
 		this.transaction_id = 0;
 		this.date = null;
 		this.position = null;
 		this.state = false;
 		this.comment = null;
 		this.positions = new LinkedList<Position>();
+		this.quant = 0;
         
     }
 }

@@ -1,6 +1,10 @@
 package com.mycompany;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -8,6 +12,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import com.utils.DatabaseConnection;
 import com.utils.HibernateUtil;
 
 public class PositionDOA {
@@ -138,8 +143,8 @@ public class PositionDOA {
         return users;
     }
  
-    public List<Position> getPositionByName(String cid) {
-        System.out.println(cid);
+    public Position getPositionByName(String cid) {
+       //System.out.println(cid);
         Position cust = null;
         Transaction trns = null;
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -148,11 +153,11 @@ public class PositionDOA {
             String queryString = "from Position where name = :cid";
             Query query = session.createQuery(queryString);
             query.setParameter("cid", cid);
-            //cust = (Position) query.uniqueResult();
+            cust = (Position) query.uniqueResult();
             //System.out.println(cust.getName() + " Imie to me");
             List<Position> list = query.list();
             if (list.size() > 0) {
-                return list;
+                return cust;
             }
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -164,7 +169,7 @@ public class PositionDOA {
     }
     
     public Position getPositionById(int cid) {
-        System.out.println(cid);
+        //System.out.println(cid);
         Position cust = null;
         Transaction trns = null;
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -187,5 +192,36 @@ public class PositionDOA {
         }
         return null;
     }
+    
+    public static LinkedList<Position> getTopPositions ()  {
+		Connection c = DatabaseConnection.getInstance().getPsqlConnection();		
+		try {
+			Statement stmt = c.createStatement();
+			String query="select sum(quantity) as counter, name from transactions join position on (position_id = id) "
+					+ "group by name order by counter desc NULLS LAST;";
+			
+			final LinkedList<Position> result = new LinkedList<Position>();
+			//System.out.println(query);
+			
+			ResultSet rs = stmt.executeQuery(query);
+			while(rs.next()){
+					int count  = rs.getInt(1);									
+					String name = rs.getString("name");
+					Position p = new PositionDOA().getPositionByName(name);
+					result.add(new Position(p, count));
+			}
+
+			stmt.close();
+
+
+			return result;
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+
+
+	}
 }
 

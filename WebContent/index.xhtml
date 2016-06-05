@@ -4,7 +4,8 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:c="http://java.sun.com/jstl/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+       xmlns:p="http://primefaces.org/ui" >
     <h:head>
         <title>JSF Hibernate CRUD Example</title>
         <style>
@@ -17,7 +18,7 @@
             }
             td{
                 font-weight: bold;
-                font-size: small;
+                
             }
             .msg{
                 font-size: small;
@@ -26,6 +27,7 @@
         </style>
     </h:head>
     <h:body>
+
     	  <c:choose>
     		<c:when test="${not empty login}">
     		You are already login as: ${login}
@@ -77,15 +79,16 @@
                 <h:inputText value="#{position.name}" id="pn"/>
                 
                 <h:outputLabel value="Position Category:"/>
-                <h:selectOneMenu value="#{position.selectedCat}" id="cat">
+                <p:selectOneMenu value="#{position.selectedCat}" id="cat">
                  	<f:selectItems value="#{category.allCategoriesNames}"/>                	                  	
-               	</h:selectOneMenu>
+               	</p:selectOneMenu>
                    
-                <h:outputLabel value="Select Ingredients:"/>
-               	<h:selectManyMenu value="#{position.selectedIng}" id="ilist">
+                <p:outputLabel value="Select Ingredients:"/>
+               	<p:selectManyMenu value="#{position.selectedIng}" id="ilist"
+               						filter="true" filterMatchMode="contains">
                  	<f:selectItems value="#{ingredient.getAllIngredientsNames()}"/>
                    
-               	</h:selectManyMenu>   
+               	</p:selectManyMenu>   
                                
                 <f:facet name="footer">                   
                     <h:commandButton value="Save" action="#{position.savePosition}">

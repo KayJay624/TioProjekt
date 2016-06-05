@@ -4,7 +4,8 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:c="http://java.sun.com/jstl/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui" >
     <h:head>
         <title>New order</title>
         <style>
@@ -12,7 +13,7 @@
                 text-align: center;
             }
             thead{
-                background-color: magenta;
+                background-color: #ff6666;
                 color: white;
             }
             td{
@@ -26,63 +27,70 @@
         </style>
     </h:head>
     <h:body>
+    		
+    	   <c:choose>
+    		<c:when test="${not empty login}">
+    		Your login is: ${login} and you are: ${role}
+    		<c:set value="${login}" target="#{user}" property="userName" />
+    		<h:form>
+    		<h3>Menu</h3>
+			  <p:menu toggleable="true" style="width: 400px">
+			     <c:forEach var="cat" items="${category.allCategories}">
+			        <p:submenu label="${cat.name}" >
+			          <c:forEach var="pos" items="${position.getAllPositions(cat.id)}">
+			            <p:menuitem toggleable="false">
+			            	<p:panelGrid style="width: 370px">
+			            		<p:column  style="width: 300px"><p:outputLabel value="${pos.name}"/></p:column>			            					            		
+			            		<p:column style="width: 30px"><p:commandButton value="Add" update="menu2 menu3"
+			            			action="#{transact.addPosition(pos)}" styleClass="ui-priority-primary"
+			            			/></p:column>
+			            	</p:panelGrid>
+			            	
+			            </p:menuitem>
+			          </c:forEach> 
+			        </p:submenu>
+			   	  </c:forEach>
+    		  </p:menu>
+    		</h:form>
     	
-    	  <c:choose>
-    		<c:when test="${not empty login and role == user}">
-    		Your login is: ${login} and you are: ${role} 
-    	<h:form id="menu">
-    	
-    	<h:panelGrid id="panel23" columns="1" border="2" cellpadding="5" cellspacing="3">
-    	  <f:facet name="header">
-    	  	<h:outputLabel value="MENU:"/>
-    	  </f:facet>
-		  <c:forEach var="cat" items="${category.allCategories}">
-				<h:column>
-				 	<h:outputLabel value="${cat.name}" style="font-size:large"/>
-				 		
-			 	</h:column>
-			 		<h:panelGrid id="panel3" columns="2" border="2" cellpadding="5" cellspacing="1">
-			 		 <c:forEach var="pos" items="${position.getAllPositions(cat.id)}">
-			 		 
-			 		 				 		  
-				 		 	<h:outputLabel value="${pos.name}" style="font-size:small"/>
-				 		 	         	
-          					<h:commandButton value="Add" action="#{transact.addPosition(pos)}" style="float:right">
-	                      		<f:ajax render="menu2" execute="@form"/>
-	                		</h:commandButton>	
-	                
-			 		 		<c:forEach var="ing" items="${ingredient.getAllIngredients(pos.id)}">
-			 		 
-			 		 				 		  
-					 		 	<h:outputLabel value="- ${ing.name}" style="font-size:small"/>
-					 		 	<h:outputLabel value=" " style="font-size:small"/>					 		 		                		
-			 		 
-					 		 </c:forEach>
-					 		
-	                		
-			 		 
-			 		 </c:forEach>
-			 		</h:panelGrid>
-			
-		  </c:forEach>
-		</h:panelGrid>
-		</h:form>
-		
-		<h:form id="menu2">
-		<h:panelGrid id="panel234" columns="1" border="2" cellpadding="5" cellspacing="3">
-		<h:outputLabel value="Wybrane dania:" />
+		<h:form id="menu2" render="${not empty transact.position}">
+		<h:panelGrid id="panel234" columns="3" border="2" cellpadding="5" cellspacing="3">
+		<f:facet name="header">
+			<h:outputLabel value="Wybrane dania:" />
+		</f:facet>
 		<c:forEach var="pos" items="${transact.positions}">
+			<h:outputLabel value="${pos.quant}"/>
 			<h:outputLabel value="${pos.name}"/>
+			<p:spinner min="0" max="10" value="#{spinner.num}"/>
+					
 		</c:forEach>
 		<f:facet name="footer">
-	               	<h:commandButton value="Order" action="#{transact.saveTransaction()}">
-                  	 	<f:ajax render="menu2" execute="@form"/>
+	               	<h:commandButton value="Order" action="#{transact.saveTransaction(spinner.num, user.userName)}">
+                  	 	<f:ajax render="menu2 menu3" execute="@form"/>
+                   	</h:commandButton>
+                   		<h:commandButton value="Clear" action="#{transact.clearAll()}">
+                  	 	<f:ajax render="menu2 menu3" execute="@form"/>
                    	</h:commandButton>
                    	</f:facet>
 		</h:panelGrid>
 		</h:form>
 		
+		<h:form id="menu3">
+		<h:panelGrid id="panel2345" columns="3" border="2" cellpadding="5" cellspacing="3">
 		
+		<f:facet name="header">
+			<h:outputLabel value="Twoje zamowienia:" />
+		</f:facet>
+		<p:calendar id="from" value="#{user.from}" />
+		<p:calendar id="to" value="#{user.to}" />
+		<p:commandButton value="Get" update="menu3" styleClass="ui-priority-primary"/>
+		<c:forEach var="tra" items="${user.allTransaction}">			
+			<h:outputLabel value="${tra.date}"/>
+			<h:outputLabel value="${tra.position.name}"/>
+			<h:outputLabel value="${tra.quant}"/>
+		</c:forEach>
+		</h:panelGrid>
+		</h:form>
 	</c:when>	
     <c:otherwise>
     	You are not login

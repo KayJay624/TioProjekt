@@ -19,9 +19,22 @@ public class Position implements java.io.Serializable{
 	private String selectedPos;
 	private String selectedCat;
 	private LinkedList<String> selectedIng = new LinkedList<String>();
-		
+	public int count;
+	private int counter;
+	private int quant;
+	
+	
+	
 	public Position() {
 		
+	}
+	
+	public Position(Position p, int c) {
+		this.id = p.getId();
+		this.name = p.getName();
+		this.category = p.getCategory();
+		this.ingredients = p.getIngredients();
+		this.count = c;
 	}
 	
 	public Position(String name, Category category) {
@@ -31,6 +44,24 @@ public class Position implements java.io.Serializable{
 	}
 	
 	
+	
+	public int getQuant() {
+		System.out.println(this.name + ":  Counter: " + this.counter);
+		return quant;
+	}
+
+	public void setQuant(int quant) {
+		this.quant = quant;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
 	public String getSelectedPos() {
 		return selectedPos;
 	}
@@ -68,6 +99,15 @@ public class Position implements java.io.Serializable{
 	
 	
 	
+	public int getCounter() {
+		return counter;
+	}
+
+	public void setCounter(int counter) {
+		
+		this.counter = counter;
+	}
+
 	public LinkedList<String> getSelectedIng() {
 		return selectedIng;
 	}
@@ -137,6 +177,13 @@ public class Position implements java.io.Serializable{
         return users;
     }
     
+    public List<Position> getTop() {
+        List<Position> users = new ArrayList<Position>();
+        PositionDOA dao = new PositionDOA();
+        users = dao.getTopPositions();
+        return users;
+    }
+    
     public List<String> getAllPositionsNames() {
         List<String> users = new ArrayList<String>();
         PositionDOA dao = new PositionDOA();
@@ -153,12 +200,18 @@ public class Position implements java.io.Serializable{
  
     public void fullInfo() {
     	PositionDOA dao = new PositionDOA();
-        List<Position> lc = dao.getPositionByName(selectedPos);
+        /*List<Position> lc = dao.getPositionByName(selectedPos);
         System.out.println(lc.get(0).name);
         this.id = lc.get(0).id;
         this.name = lc.get(0).name;
         this.category = lc.get(0).category;
-        this.selectedCat = lc.get(0).category.getName();
+        this.selectedCat = lc.get(0).category.getName();*/
+    	Position lc = dao.getPositionByName(selectedPos);
+        System.out.println(lc.name);
+        this.id = lc.getId();
+        this.name = lc.getName();
+        this.category = lc.category;
+        this.selectedCat = lc.category.getName();
 
     }
  

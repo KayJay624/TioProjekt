@@ -150,5 +150,30 @@ public class CategoryDAO {
         }
         return null;
     }
-
+    
+    public Category getCategoryByItsName(String name) {
+        System.out.println(name);
+        Category cust = null;
+        Transaction trns = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            trns = session.beginTransaction();
+            String queryString = "from Category where name = :cid";
+            Query query = session.createQuery(queryString);
+            query.setParameter("cid", name);
+            cust = (Category) query.uniqueResult();
+            //System.out.println(cust.getName() + " Imie to me");
+            List<Category> list = query.list();
+            if (list.size() > 0) {
+                return cust;
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            session.flush();
+            session.close();
+        }
+        return null;
+    }
+    
 }

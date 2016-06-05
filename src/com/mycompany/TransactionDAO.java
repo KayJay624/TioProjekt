@@ -22,19 +22,20 @@ public class TransactionDAO {
 			try {
 				PreparedStatement statement = c.prepareStatement(
 						"INSERT INTO transactions (user_id, transaction_date, "
-						+ "position_id, comment, state) VALUES (?, ?, ?, ?, ?)");
+						+ "position_id, comment, state, quantity) VALUES (?, ?, ?, ?, ?, ?)");
 				statement.setInt(1, userId);
 				//DateFormat df = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
-				//Date result =  df.parse(new Date().toString());
+				//Date result =  df.format(new Date());
 				//statement.setDate(2, new java.sql.Date(result.getTime()));
-				statement.setDate(2, new java.sql.Date(0));
+				statement.setDate(2, new java.sql.Date(new Date().getTime()));
 				statement.setInt(3, transaction.getPosition().getId());
 				statement.setString(4, "pusto");
 				statement.setBoolean(5, false);
+				statement.setInt(6, transaction.getQuant());
 				statement.executeUpdate();
 				statement.close();
 				c.commit();
-				System.out.println("sdfsdf");
+				//System.out.println("sdfsdf");
 									
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -88,7 +89,7 @@ public class TransactionDAO {
 			}
 
 			final LinkedList<Transact> result = new LinkedList<Transact>();
-			System.out.println(query);
+			//System.out.println(query);
 			ResultSet rs = stmt.executeQuery(query);
 			while(rs.next()){
 					int id  = rs.getInt("transaction_id");
@@ -96,9 +97,10 @@ public class TransactionDAO {
 					String date = rs.getString("transaction_date");
 					String comment = rs.getString("comment");
 					boolean state  = rs.getBoolean("state");
+					int quant = rs.getInt("quantity");
 					PositionDOA posDoa = new PositionDOA();
 
-					result.add(new Transact(id, date, posDoa.getPositionById(pos), state, comment));
+					result.add(new Transact(id, date, posDoa.getPositionById(pos), state, comment, quant));
 			}
 
 			stmt.close();
@@ -113,6 +115,39 @@ public class TransactionDAO {
 
 
 	}
+	
+	public static int getUserId (String userName)  {
+		Connection c = DatabaseConnection.getInstance().getPsqlConnection();
+		
+		try {
+			PreparedStatement statement = c.prepareStatement(
+					"SELECT * FROM users where username = ?");
+			statement.setString(1, userName);
+			
+			//statement;
+			//statement.close();
+			//c.commit();
 
+			//final LinkedList<Transact> result = new LinkedList<Transact>();
+			//System.out.println(query);
+			int id = 0;
+			ResultSet rs = statement.executeQuery();
+			while(rs.next()){
+					id  = rs.getInt("userid");
+					
+			}
+
+			statement.close();
+
+			//System.out.println("Userid: " + id);
+			return id;
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
+
+
+	}
 
 }

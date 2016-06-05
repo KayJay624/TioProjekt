@@ -114,7 +114,7 @@ public class IngredientDOA {
         try {
             trns = session.beginTransaction();
             //users = session.createQuery("select * from Category").list();
-            users = session.createQuery("select name from Ingredient").list();
+            users = session.createQuery("select distinct name from Ingredient").list();
             
         } catch (RuntimeException e) {
             e.printStackTrace();

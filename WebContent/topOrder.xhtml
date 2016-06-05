@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui" >
+    <h:head>
+        <title>Top orders</title>
+        <style>
+            tfoot{
+                text-align: center;
+            }
+            thead{
+                background-color: magenta;
+                color: white;
+            }
+            td{
+                font-weight: bold;
+                
+            }
+            .msg{
+                font-size: small;
+                color: blue;
+            }
+        </style>
+    </h:head>
+    
+    <h:body>
+    	<h:form>
+    	  <h3>TOP ORDERS:</h3>    
+		  <h:panelGrid id="panel" columns="3" border="1" cellpadding="5" cellspacing="1">
+			<p:outputLabel value="Counter"/>
+			<p:outputLabel value="Name"/>
+			<p:outputLabel value="Category"/>
+			<c:forEach var="pos" items="${position.top}">
+				<p:outputLabel value="${pos.count}"/>
+				<p:outputLabel value="${pos.name}"/>
+				<p:outputLabel value="${pos.category.name}"/>
+    		</c:forEach>
+    	  </h:panelGrid>  
+    	</h:form>
+    	
+    	
+    	
+    	
+    </h:body>
+</html>
